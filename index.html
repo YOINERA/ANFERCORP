@@ -3,173 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ANFERCORP - COTIZACION</title>
+    <title>ANFERCORP</title>
     <link rel="icon" href="accents/ANFERCORP.jpeg" type="image/jpeg">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="login.css">
 </head>
 <body>
-    <div class="container">
-        <!-- PANTALLA 1: FORMULARIO -->
-        <div id="form-screen" class="screen active">
-            <h1>Formulario de Cotización</h1>
-            
-            <h2>Datos de la Cotización</h2>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="quote-number">N° Presupuesto</label>
-                    <input type="text" id="quote-number" placeholder="0001 - 0000279">
-                </div>
-                <div class="form-group">
-                    <label for="quote-date">Fecha de Emisión</label>
-                    <input type="date" id="quote-date">
-                </div>
-                <div class="form-group">
-                    <label for="valid-until">Vigencia hasta</label>
-                    <input type="date" id="valid-until">
-                </div>
-            </div>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="currency">Moneda</label>
-                    <select id="currency">
-                        <option value="PEN">Soles (S/)</option>
-                        <option value="USD">Dólares (US$)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="order-type">Tipo de Orden</label>
-                    <select id="order-type">
-                        <option value="Entrega Inmediata">Entrega Inmediata</option>
-                        <option value="Pedido Especial">Pedido Especial</option>
-                    </select>
-                </div>
-            </div>
-            
-            <h2>Información del Cliente</h2>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="client-ruc">RUC</label>
-                    <input type="text" id="client-ruc" placeholder="20605975225">
-                </div>
-                <div class="form-group">
-                    <label for="client-name">Nombre/Razón Social</label>
-                    <input type="text" id="client-name" placeholder="CONSORCIO COPTOS">
-                </div>
-            </div>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="client-address">Dirección</label>
-                    <input type="text" id="client-address" placeholder="AV. HUANACAURE NRO. 959 URB. TAHUANTINSUYO ZN. CUATRO LIMA LIMA INDEPENDENCIA">
-                </div>
-            </div>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="client-district">Distrito</label>
-                    <input type="text" id="client-district" placeholder="INDEPENDENCIA">
-                </div>
-                <div class="form-group">
-                    <label for="client-province">Provincia</label>
-                    <input type="text" id="client-province" placeholder="LIMA">
-                </div>
-                <div class="form-group">
-                    <label for="client-department">Departamento</label>
-                    <input type="text" id="client-department" placeholder="LIMA">
-                </div>
-            </div>
-            
-            <h2>Artículos de la Cotización</h2>
-            
-            <table class="items-table">
-                <thead>
-                    <tr>
-                        <th>Descripción</th>
-                        <th>Unidad</th>
-                        <th>Cantidad</th>
-                        <th>Precio Unitario</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody id="items-body">
-                    <tr>
-                        <td><input type="text" class="item-desc" placeholder="Descripción del artículo"></td>
-                        <td>
-                            <select class="item-unit">
-                                <option value="UND">UND</option>
-                                <option value="KG">KG</option>
-                                <option value="PAR">PAR</option>
-                                <option value="MTS">MTS</option>
-                                <option value="GLN">GLN</option>
-                                <option value="LTS">LTS</option>
-                                <option value="CAJ">CAJ</option>
-                                <option value="ROL">ROL</option>
-                            </select>
-                        </td>
-                        <td><input type="number" class="item-qty" value="1" min="1"></td>
-                        <td><input type="number" class="item-price" placeholder="0.00" step="0.01" min="0"></td>
-                        <td><button type="button" class="btn btn-remove" onclick="removeItem(this)">Eliminar</button></td>
-                    </tr>
-                </tbody>
-            </table>
-            
-            <button type="button" class="btn" onclick="addItem()">Agregar Artículo</button>
-            
-            <h2>Información Bancaria</h2>
-            
-            <div class="bank-accounts" id="bank-accounts-container">
-                <!-- Los bancos se agregarán dinámicamente aquí -->
-            </div>
-            
-            <button type="button" class="btn" onclick="addBank()">Agregar Banco</button>
-            
-            <h2>Información del Asesor</h2>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="advisor-name">Nombre del Asesor</label>
-                    <input type="text" id="advisor-name" placeholder="Huamanchumo Paula">
-                </div>
-            </div>
-            
-            <div style="text-align: center; margin-top: 30px;">
-                <button type="button" class="btn btn-success" onclick="showPreview()">Generar Vista Previa</button>
-            </div>
+    <div class="login-container">
+        <div class="logo">
+            <h1>ANFERCORP S.A.C.</h1>
+            <p>Sistema de Cotizaciones</p>
         </div>
         
-        <!-- PANTALLA 2: VISTA PREVIA -->
-        <div id="preview-screen" class="screen">
-            <h1>Vista Previa de Cotización</h1>
-            
-            <div class="preview-container" id="quote-preview">
-                <!-- La cotización se generará aquí con JavaScript -->
+        <form id="login-form">
+            <div class="form-group">
+                <label for="username">Usuario</label>
+                <input type="text" id="username" placeholder="Ingrese su usuario" required>
             </div>
             
-            <div class="actions">
-                <button type="button" class="btn btn-warning" onclick="showForm()">Editar Cotización</button>
-                <button type="button" class="btn btn-danger" onclick="cancelQuote()">Cancelar</button>
-                <button type="button" class="btn btn-success" onclick="showPrint()">Confirmar</button>
+            <div class="form-group">
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" placeholder="Ingrese su contraseña" required>
             </div>
-        </div>
+            
+            <button type="submit" class="btn-login">Iniciar Sesión</button>
+            
+            <div id="error-message" class="error-message">
+                Usuario o contraseña incorrectos
+            </div>
+        </form>
         
-        <!-- PANTALLA 3: IMPRIMIR -->
-        <div id="print-screen" class="screen">
-            
-            <div id="quote-print">
-                <!-- La cotización para imprimir se generará aquí con JavaScript -->
-            </div>
-            
-            <div class="actions no-print">
-                <button type="button" class="btn" onclick="window.print()">Imprimir Cotización</button>
-                <button type="button" class="btn btn-whatsapp" onclick="sendWhatsApp()">Enviar por WhatsApp</button>
-                <button type="button" class="btn btn-success" onclick="newQuote()">Nueva Cotización</button>
-            </div>
+        <div class="footer">
+            <p>© 2023 ANFERCORP S.A.C. - Todos los derechos reservados</p>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="login.js"></script>
 </body>
 </html>
