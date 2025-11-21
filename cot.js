@@ -314,17 +314,17 @@ function addBank() {
         <div class="form-row">
             <div class="form-group">
                 <label for="bank-name-${bankCounter}">Nombre del Banco</label>
-                <input type="text" id="bank-name-${bankCounter}" placeholder="BCP">
+                <input type="text" id="bank-name-${bankCounter}" placeholder="No especificado">
             </div>
         </div>
         <div class="form-row">
             <div class="form-group">
                 <label for="bank-account-pen-${bankCounter}">Cuenta Soles</label>
-                <input type="text" id="bank-account-pen-${bankCounter}" placeholder="5707200550002">
+                <input type="text" id="bank-account-pen-${bankCounter}" placeholder="No especificada">
             </div>
             <div class="form-group">
                 <label for="bank-cci-pen-${bankCounter}">CCI Soles</label>
-                <input type="text" id="bank-cci-pen-${bankCounter}" placeholder="00257000720055000209">
+                <input type="text" id="bank-cci-pen-${bankCounter}" placeholder="No especificada">
             </div>
         </div>
         <div class="form-row">
@@ -764,4 +764,5 @@ function resetForm() {
     
     // Ocultar resultados de búsqueda
     document.getElementById('client-search-results').style.display = 'none';
+
 }
