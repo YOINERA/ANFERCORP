@@ -104,3 +104,26 @@ input:focus {
         padding: 30px 20px;
     }
 }
+ .logo-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo-image {
+            max-width: 150px;
+            max-height: 150px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+        }
+        
+        .logo-text h1 {
+            margin: 0;
+            color: #2c3e50;
+            font-size: 24px;
+        }
+        
+        .logo-text p {
+            margin: 5px 0 0 0;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
