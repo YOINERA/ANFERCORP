@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANFERCORP</title>
+    <link rel="icon" href="accents/ANFERCORP.jpeg" type="image/jpeg">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- PANTALLA 1: FORMULARIO -->
+        <div id="form-screen" class="screen active">
+            <h1>Formulario de Cotización</h1>
+            
+            <h2>Datos de la Cotización</h2>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="quote-number">N° Presupuesto</label>
+                    <input type="text" id="quote-number" placeholder="0001 - 0000279">
+                </div>
+                <div class="form-group">
+                    <label for="quote-date">Fecha de Emisión</label>
+                    <input type="date" id="quote-date">
+                </div>
+                <div class="form-group">
+                    <label for="valid-until">Vigencia hasta</label>
+                    <input type="date" id="valid-until">
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="currency">Moneda</label>
+                    <select id="currency">
+                        <option value="PEN">Soles (S/)</option>
+                        <option value="USD">Dólares (US$)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="order-type">Tipo de Orden</label>
+                    <select id="order-type">
+                        <option value="Entrega Inmediata">Entrega Inmediata</option>
+                        <option value="Pedido Especial">Pedido Especial</option>
+                    </select>
+                </div>
+            </div>
+            
+           <h2>Información del Cliente</h2>
+
+<div class="client-search-container">
+    <div class="form-row">
+        <div class="form-group">
+            <label for="client-ruc">RUC</label>
+            <input type="text" id="client-ruc" placeholder="Ingrese RUC del cliente" oninput="searchClientByRUC()">
+        </div>
+    </div>
+    <div id="client-search-results" class="search-results"></div>
+</div>
+
+<div class="form-row">
+    <div class="form-group">
+        <label for="client-name">Nombre/Razón Social</label>
+        <input type="text" id="client-name" placeholder="Nombre del cliente">
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group">
+        <label for="client-address">Dirección</label>
+        <input type="text" id="client-address" placeholder="Dirección completa">
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group">
+        <label for="client-district">Distrito</label>
+        <input type="text" id="client-district" placeholder="Distrito">
+    </div>
+    <div class="form-group">
+        <label for="client-province">Provincia</label>
+        <input type="text" id="client-province" placeholder="Provincia">
+    </div>
+    <div class="form-group">
+        <label for="client-department">Departamento</label>
+        <input type="text" id="client-department" placeholder="Departamento">
+    </div>
+</div>
+
+            
+            <h2>Artículos de la Cotización</h2>
+            <div class="product-search-container">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="product-search">Buscar Producto</label>
+                        <input type="text" id="product-search" placeholder="Ingrese nombre o código del producto">
+                    </div>
+                </div>
+                <div id="search-results" class="search-results"></div>
+            </div>
+            
+            <table class="items-table">
+                <thead>
+                    <tr>
+                        <th>Descripción</th>
+                        <th>Unidad</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="items-body">
+                    
+                </tbody>
+            </table>
+            
+            <button type="button" class="btn" onclick="addItem()">Agregar Artículo Manualmente</button>
+            <h2>Información Bancaria</h2>
+            
+            <div class="bank-accounts" id="bank-accounts-container">
+                <!-- Los bancos se agregarán dinámicamente aquí -->
+            </div>
+            
+            <button type="button" class="btn" onclick="addBank()">Agregar Banco</button>
+            
+            <h2>Información del Asesor</h2>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="advisor-name">Nombre del Asesor</label>
+                    <select id="advisor-name">
+                        <option value="">Seleccione un asesor</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <button type="button" class="btn btn-success" onclick="showPreview()">Generar Vista Previa</button>
+            </div>
+        </div>
+        
+        <!-- PANTALLA 2: VISTA PREVIA -->
+        <div id="preview-screen" class="screen">
+            <h1>Vista Previa de Cotización</h1>
+            
+            <div class="preview-container" id="quote-preview">
+                <!-- La cotización se generará aquí con JavaScript -->
+            </div>
+            
+            <div class="actions">
+                <button type="button" class="btn btn-warning" onclick="showForm()">Editar Cotización</button>
+                <button type="button" class="btn btn-danger" onclick="cancelQuote()">Cancelar</button>
+                <button type="button" class="btn btn-success" onclick="showPrint()">Confirmar</button>
+            </div>
+        </div>
+        
+        <!-- PANTALLA 3: IMPRIMIR -->
+        <div id="print-screen" class="screen">
+            
+            <div id="quote-print">
+                <!-- La cotización para imprimir se generará aquí con JavaScript -->
+            </div>
+            
+            <div class="actions no-print">
+                <button type="button" class="btn" onclick="window.print()">Imprimir Cotización</button>
+                <button type="button" class="btn btn-whatsapp" onclick="sendWhatsApp()">Enviar por WhatsApp</button>
+                <button type="button" class="btn btn-success" onclick="newQuote()">Nueva Cotización</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
