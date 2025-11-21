@@ -528,9 +528,11 @@ function generatePreview(data) {
             };
         });
         
-        // Calcular IGV (18%)
-        const totalIgv = subtotal * 0.18;
-        const total = subtotal + totalIgv;
+        // CALCULAR GRAVADO (BASE IMPONIBLE) Y IGV CORRECTAMENTE
+        // Los precios ya incluyen IGV, por lo tanto:
+        const gravado = subtotal / 1.18;  // Base imponible (sin IGV)
+        const totalIgv = subtotal - gravado;  // IGV = Total - Base imponible
+        const total = subtotal;  // El total sigue siendo el mismo
         
         // Formatear fechas
         const formatDate = (dateString) => {
@@ -565,31 +567,30 @@ function generatePreview(data) {
                 </div>
                 
                 <div class="quote-info">
-                        
-                        <div class="quote-number-box">
-                            <div class="company-subtitle">${data.companyRuc}</div>
-                            <div class="quote-header-text">COTIZACIÓN</div>
-                            <div class="quote-number">${data.quoteNumber}</div>
-                        </div>
-                        <br></br>
+                    <div class="quote-number-box">
+                        <div class="company-subtitle">${data.companyRuc}</div>
+                        <div class="quote-header-text">COTIZACIÓN</div>
+                        <div class="quote-number">${data.quoteNumber}</div>
+                    </div>
+                    <br></br>
                     <div class="quote-details">
-    <div class="detail-row">
-        <span class="detail-label">FECHA EMISION:</span>
-        <span class="detail-value">${formatDate(data.quoteDate)}</span>
-    </div>
-    <div class="detail-row">
-        <span class="detail-label">FECHA VENCIMIENTO:</span>
-        <span class="detail-value">${formatDate(data.validUntil)}</span>
-    </div>
-    <div class="detail-row">
-        <span class="detail-label">VENDEDOR:</span>
-        <span class="detail-value">${data.advisorName}</span>
-    </div>
-</div>
+                        <div class="detail-row">
+                            <span class="detail-label">FECHA EMISION:</span>
+                            <span class="detail-value">${formatDate(data.quoteDate)}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">FECHA VENCIMIENTO:</span>
+                            <span class="detail-value">${formatDate(data.validUntil)}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">VENDEDOR:</span>
+                            <span class="detail-value">${data.advisorName}</span>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div style="border-bottom: 1px solid #000; margin: 10px 0;"></div>
-           <div class="info-container">
+            <div class="info-container">
                 <div class="client-details">
                     <p><strong>CLIENTE:</strong> ${data.clientName}</p>
                     <p><strong>RUC:</strong> ${data.clientRuc}</p>
@@ -629,7 +630,7 @@ function generatePreview(data) {
                 <table>
                     <tr>
                         <td>GRAVADO</td>
-                        <td>${currencySymbol} ${subtotal.toFixed(2)}</td>
+                        <td>${currencySymbol} ${gravado.toFixed(2)}</td>
                     </tr>
                     <tr>
                         <td>I.G.V. 18%</td>
@@ -753,4 +754,5 @@ function resetForm() {
     document.getElementById('client-search-results').style.display = 'none';
 
 }
+
 
