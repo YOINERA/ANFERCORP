@@ -695,20 +695,7 @@ function generatePrintView(data) {
     document.getElementById('quote-print').innerHTML = document.getElementById('quote-preview').innerHTML;
 }
 
-// Función para enviar por WhatsApp
-function sendWhatsApp() {
-    const companyName = quoteData.companyName || 'ANFERCORP S.A.C.';
-    const quoteNumber = quoteData.quoteNumber || '0001 - 0000279';
-    
-    let message = `*Cotización ${quoteNumber} - ${companyName}*%0A%0A`;
-    message += `Estimado cliente, adjuntamos su cotización.%0A%0A`;
-    message += `*Cliente:* ${quoteData.clientName}%0A`;
-    message += `*RUC:* ${quoteData.clientRuc}%0A`;
-    message += `*Vigencia:* ${new Date(quoteData.validUntil).toLocaleDateString('es-PE')}%0A%0A`;
-    message += `Para más información, contáctenos.`;
-    
-    window.open(`https://wa.me/?text=${message}`, '_blank');
-}
+
 
 // Función para nueva cotización
 function newQuote() {
@@ -766,3 +753,4 @@ function resetForm() {
     document.getElementById('client-search-results').style.display = 'none';
 
 }
+
