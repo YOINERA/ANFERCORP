@@ -582,7 +582,7 @@ function generatePreview(data) {
         // Generar HTML de las cuentas bancarias para el pie de página
         const footerBanksHTML = `
             <div class="footer-section">
-                <div style="border-top: 1px solid #000; margin-bottom: 5px; padding-top: 5px;">
+                <div style="border-top: 1px solid #000; margin-bottom: 8px; padding-top: 8px;">
                     <strong>CUENTAS BANCARIAS:</strong>
                 </div>
                 <div class="footer-banks">
@@ -599,22 +599,22 @@ function generatePreview(data) {
             </div>
         `;
         
-        // Generar HTML del encabezado para páginas 2+
+        // Generar HTML del encabezado para TODAS las páginas
         const pageHeaderHTML = `
             <div class="page-header-section">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-                    <div style="font-weight: bold; font-size: 12px;">${data.companyName} - ${data.companyRuc}</div>
-                    <div style="font-size: 10px;">Cotización: ${data.quoteNumber}</div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <div style="font-weight: bold; font-size: 13px;">${data.companyName} - ${data.companyRuc}</div>
+                    <div style="font-size: 11px;">Cotización: ${data.quoteNumber}</div>
                 </div>
-                <div style="font-size: 9px; border-top: 1px solid #000; padding-top: 3px;">
+                <div style="font-size: 10px; border-top: 1px solid #000; padding-top: 5px;">
                     <strong>CLIENTE:</strong> ${data.clientName} - <strong>RUC:</strong> ${data.clientRuc} - 
                     <strong>DIRECCIÓN:</strong> ${data.clientAddress}
                 </div>
             </div>
         `;
         
-        // Dividir los items en páginas si son muchos
-        const itemsPerPage = 20; // Ajusta según necesites
+        // Dividir los items en páginas - AUMENTAR límite a 35 items por página
+        const itemsPerPage = 35;
         const pages = [];
         
         for (let i = 0; i < itemsWithTotals.length; i += itemsPerPage) {
@@ -647,7 +647,7 @@ function generatePageHTML(data, pageItems, pageIndex, pageHeaderHTML, footerBank
     
     return `
         <div class="${pageClass}">
-            ${isSecondaryPage ? pageHeaderHTML : ''}
+            ${pageHeaderHTML}
             
             ${!isSecondaryPage ? `
             <div class="header-container">
@@ -715,7 +715,7 @@ function generatePageHTML(data, pageItems, pageIndex, pageHeaderHTML, footerBank
                 <tbody>
                     ${pageItems.map((item, index) => `
                         <tr>
-                            <td style="text-align: center">0${(pageIndex * 20) + index + 1}</td>
+                            <td style="text-align: center">0${(pageIndex * 35) + index + 1}</td>
                             <td>${item.desc}</td>
                             <td style="text-align: center">${item.unit}</td>
                             <td style="text-align: center">${item.qty}</td>
@@ -726,7 +726,7 @@ function generatePageHTML(data, pageItems, pageIndex, pageHeaderHTML, footerBank
                 </tbody>
             </table>
             
-            ${!isSecondaryPage ? `
+            ${!isSecondaryPage && pageIndex === 0 ? `
             <div class="totals">
                 <table>
                     <tr>
@@ -743,25 +743,12 @@ function generatePageHTML(data, pageItems, pageIndex, pageHeaderHTML, footerBank
                     </tr>
                 </table>
             </div>
-            
-            <div class="bank-info">
-                <p><strong>CUENTAS BANCARIAS:</strong></p>
-                <div class="bank-container">
-                    ${data.banks.map(bank => `
-                        <div class="bank-column">
-                            <div class="bank-title">${bank.name}:</div>
-                            ${bank.accountPen ? `<div>SOLES: Cta. Cte: ${bank.accountPen} - CCI: ${bank.cciPen}</div>` : ''}
-                            ${bank.accountUsd ? `<div>DÓLARES: Cta. Cte: ${bank.accountUsd} - CCI: ${bank.cciUsd}</div>` : ''}
-                        </div>
-                    `).join('')}
-                </div>
-            </div>
             ` : ''}
 
             ${footerBanksHTML}
         </div>
         
-        ${isSecondaryPage ? '<div style="page-break-after: always;"></div>' : ''}
+        ${isSecondaryPage && pageIndex < data.items.length / 35 - 1 ? '<div style="page-break-after: always;"></div>' : ''}
     `;
 }
 // Función para volver al formulario
@@ -853,6 +840,7 @@ function resetForm() {
     // Ocultar resultados de búsqueda
     document.getElementById('client-search-results').style.display = 'none';
 }
+
 
 
 
