@@ -581,6 +581,7 @@ function generatePreview(data) {
         // Generar HTML de las cuentas bancarias para el pie de página
         const footerBanksHTML = `
             <div class="footer-section">
+                <div style="border-top: 2px solid #000; margin-bottom: 10px; padding-top: 10px;">
                     <strong style="font-size: 14px;">CUENTAS BANCARIAS:</strong>
                 </div>
                 <div class="footer-banks">
@@ -611,8 +612,8 @@ function generatePreview(data) {
             </div>
         `;
         
-        // Dividir los items en páginas - 30 items por página
-        const itemsPerPage = 30;
+        // Dividir los items en páginas - 25 items por página
+        const itemsPerPage = 25;
         const pages = [];
         
         for (let i = 0; i < itemsWithTotals.length; i += itemsPerPage) {
@@ -709,7 +710,7 @@ function generatePageHTML(data, pageItems, pageIndex, pageHeaderHTML, footerBank
                 <tbody>
                     ${pageItems.map((item, index) => `
                         <tr>
-                            <td style="text-align: center">${(pageIndex * 30) + index + 1}</td>
+                            <td style="text-align: center">${(pageIndex * 25) + index + 1}</td>
                             <td>${item.desc}</td>
                             <td style="text-align: center">${item.unit}</td>
                             <td style="text-align: center">${item.qty}</td>
@@ -834,6 +835,7 @@ function resetForm() {
     // Ocultar resultados de búsqueda
     document.getElementById('client-search-results').style.display = 'none';
 }
+
 
 
 
