@@ -460,7 +460,7 @@ input, select, textarea {
         left: 0;
         right: 0;
         background: white !important;
-        border-top: 2px solid #efb810;
+        border-top: 5px solid #efb810;
         padding: 10px 25px;
         font-size: 16px !important;
         margin: 0;
@@ -915,6 +915,7 @@ select#advisor-name {
     text-align: center;
     padding: 10px;
 }
+
 
 
 
