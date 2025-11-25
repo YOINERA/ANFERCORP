@@ -665,9 +665,9 @@ function generatePageHTML(data, pageItems, pageIndex, pageHeaderHTML, footerBank
                         <div class="quote-header-text">COTIZACIÓN</div>
                         <div class="quote-number">${data.quoteNumber}</div>
                     </div>
-                    <div class="quote-details">
+                    <div class="quote-details" style="margin-top: 5px;">
                         <div class="detail-row">
-                            <span class="detail-label" style="margin-top: 2px;">FECHA EMISION:</span>
+                            <span class="detail-label" >FECHA EMISION:</span>
                             <span class="detail-value">${formatDate(data.quoteDate)}</span>
                         </div>
                         <div class="detail-row">
@@ -853,6 +853,7 @@ function confirmAndDownload() {
         }, 800);
     }
 }
+
 
 
 
