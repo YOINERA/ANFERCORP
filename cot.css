@@ -460,13 +460,14 @@ input, select, textarea {
         left: 0;
         right: 0;
         background: white !important;
-        border-top: 2px solid #000;
-        padding: 15px 20px;
-        font-size: 12px !important;
+        border-top: 2px solid #efb810;
+        padding: 10px 25px;
+        font-size: 16px !important;
         margin: 0;
         z-index: 1000;
         line-height: 1.5;
         height: auto;
+        min-height: 100px;
     }
     
     /* Encabezado SOLO en páginas 2+ */
@@ -486,14 +487,14 @@ input, select, textarea {
     }
     
     @page {
-        margin: 1cm 0.5cm 3cm 0.5cm !important; /* Margen inferior más grande para el pie */
+        margin: 1cm 0.5cm 5cm 0.5cm !important; /* Margen inferior más grande para el pie */
     }
     
     .footer-banks {
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
-        gap: 20px;
+        gap: 25px;
     }
     
     .footer-bank {
@@ -504,8 +505,8 @@ input, select, textarea {
     
     .footer-bank-title {
         font-weight: bold;
-        margin-bottom: 5px;
-        font-size: 12px;
+        margin-bottom: 8px;
+        font-size: 16px;
     }
     
     .footer-bank-details {
@@ -533,7 +534,7 @@ input, select, textarea {
     
     /* Asegurar que el contenido no se superponga con el pie */
     .preview-container {
-        padding-bottom: 120px !important;
+        padding-bottom: 160px !important;
     }
     
     /* Mostrar páginas secundarias */
@@ -914,6 +915,7 @@ select#advisor-name {
     text-align: center;
     padding: 10px;
 }
+
 
 
 
