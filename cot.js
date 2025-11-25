@@ -546,7 +546,6 @@ function showPreview() {
 }
 
 // Función para generar la vista previa
-// Función para generar la vista previa
 function generatePreview(data) {
     try {
         // Calcular totales
@@ -562,10 +561,9 @@ function generatePreview(data) {
         });
         
         // CALCULAR GRAVADO (BASE IMPONIBLE) Y IGV CORRECTAMENTE
-        // Los precios ya incluyen IGV, por lo tanto:
-        const gravado = subtotal / 1.18;  // Base imponible (sin IGV)
-        const totalIgv = subtotal - gravado;  // IGV = Total - Base imponible
-        const total = subtotal;  // El total sigue siendo el mismo
+        const gravado = subtotal / 1.18;
+        const totalIgv = subtotal - gravado;
+        const total = subtotal;
         
         // Formatear fechas
         const formatDate = (dateString) => {
@@ -583,26 +581,42 @@ function generatePreview(data) {
         
         // Generar HTML de las cuentas bancarias para el pie de página
         const footerBanksHTML = `
-    <div class="footer-section">
-        <div style="border-top: 1px solid #000; margin-bottom: 5px; padding-top: 5px;">
-            <strong>CUENTAS BANCARIAS:</strong>
-        </div>
-        <div class="footer-banks">
-            ${data.banks.map(bank => `
-                <div class="footer-bank">
-                    <div class="footer-bank-title">${bank.name}:</div>
-                    <div class="footer-bank-details">
-                        ${bank.accountPen ? `<div>SOLES: Cta. ${bank.accountPen} - CCI: ${bank.cciPen}</div>` : ''}
-                        ${bank.accountUsd ? `<div>DÓLARES: Cta. ${bank.accountUsd} - CCI: ${bank.cciUsd}</div>` : ''}
-                    </div>
+            <div class="footer-section">
+                <div style="border-top: 1px solid #000; margin-bottom: 5px; padding-top: 5px;">
+                    <strong>CUENTAS BANCARIAS:</strong>
                 </div>
-            `).join('')}
-        </div>
-    </div>
-`;
+                <div class="footer-banks">
+                    ${data.banks.map(bank => `
+                        <div class="footer-bank">
+                            <div class="footer-bank-title">${bank.name}:</div>
+                            <div class="footer-bank-details">
+                                ${bank.accountPen ? `<div>SOLES: Cta. ${bank.accountPen} - CCI: ${bank.cciPen}</div>` : ''}
+                                ${bank.accountUsd ? `<div>DÓLARES: Cta. ${bank.accountUsd} - CCI: ${bank.cciUsd}</div>` : ''}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+        
+        // Generar HTML del encabezado para páginas 2+
+        const pageHeaderHTML = `
+            <div class="page-header-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                    <div style="font-weight: bold; font-size: 12px;">${data.companyName} - ${data.companyRuc}</div>
+                    <div style="font-size: 10px;">Cotización: ${data.quoteNumber}</div>
+                </div>
+                <div style="font-size: 9px; border-top: 1px solid #000; padding-top: 3px;">
+                    <strong>CLIENTE:</strong> ${data.clientName} - <strong>RUC:</strong> ${data.clientRuc} - 
+                    <strong>DIRECCIÓN:</strong> ${data.clientAddress}
+                </div>
+            </div>
+        `;
         
         // Generar HTML de la cotización con nuevo diseño
         const quoteHTML = `
+            ${pageHeaderHTML}
+            
             <div class="header-container">
                 <div class="company-info">
                     <div class="logo-container">
@@ -697,7 +711,7 @@ function generatePreview(data) {
             </div>
             
             <div class="bank-info">
-                <p><strong>CUENTAS  BANCARIAS:</strong></p>
+                <p><strong>CUENTAS BANCARIAS:</strong></p>
                 <div class="bank-container">
                     ${data.banks.map(bank => `
                         <div class="bank-column">
@@ -812,4 +826,5 @@ function resetForm() {
     // Ocultar resultados de búsqueda
     document.getElementById('client-search-results').style.display = 'none';
 }
+
 
