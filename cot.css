@@ -467,7 +467,6 @@ input, select, textarea {
         z-index: 1000;
         line-height: 1.5;
         height: auto;
-        min-height: 100px;
     }
     
     /* Encabezado SOLO en páginas 2+ */
@@ -915,6 +914,7 @@ select#advisor-name {
     text-align: center;
     padding: 10px;
 }
+
 
 
 
