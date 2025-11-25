@@ -528,6 +528,7 @@ input, select, textarea {
         page-break-inside: avoid;
         padding: 5px !important;
         font-size: 9px !important;
+        border: 1px solid #efb810;
     }
     
     /* Asegurar que el contenido no se superponga con el pie */
@@ -913,6 +914,7 @@ select#advisor-name {
     text-align: center;
     padding: 10px;
 }
+
 
 
 
