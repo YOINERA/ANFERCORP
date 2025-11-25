@@ -670,7 +670,7 @@ function generatePageHTML(data, pageItems, pageIndex, pageHeaderHTML, footerBank
                     <br>
                     <div class="quote-details">
                         <div class="detail-row">
-                            <span class="detail-label">FECHA EMISION:</span>
+                            <span class="detail-label" style="margin-top: 2px;">FECHA EMISION:</span>
                             <span class="detail-value">${formatDate(data.quoteDate)}</span>
                         </div>
                         <div class="detail-row">
@@ -835,6 +835,7 @@ function resetForm() {
     // Ocultar resultados de búsqueda
     document.getElementById('client-search-results').style.display = 'none';
 }
+
 
 
 
