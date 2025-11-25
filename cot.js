@@ -836,18 +836,19 @@ function resetForm() {
     document.getElementById('client-search-results').style.display = 'none';
 }
 
-// Función para descargar automáticamente el PDF
-function autoDownloadPDF() {
-    // Esperar un momento para que se renderice la vista de impresión
+// Función para mostrar impresión y descargar
+function showPrintAndDownload() {
+    // Mostrar pantalla de impresión
+    generatePrintView(quoteData);
+    document.getElementById('preview-screen').classList.remove('active');
+    document.getElementById('print-screen').classList.add('active');
+    
+    // Descargar automáticamente después de un breve delay
     setTimeout(() => {
         window.print();
-    }, 500);
-    
-    // Volver al formulario después de descargar
-    setTimeout(() => {
-        newQuote();
-    }, 2000);
+    }, 1000);
 }
+
 
 
 
