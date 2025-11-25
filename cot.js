@@ -544,7 +544,6 @@ function showPreview() {
         alert('Error al generar la vista previa. Verifique que todos los campos estén completos.');
     }
 }
-
 // Función para generar la vista previa
 function generatePreview(data) {
     try {
@@ -582,14 +581,14 @@ function generatePreview(data) {
         // Generar HTML de las cuentas bancarias para el pie de página
         const footerBanksHTML = `
             <div class="footer-section">
-                <div style="border-top: 1px solid #000; margin-bottom: 8px; padding-top: 8px;">
-                    <strong>CUENTAS BANCARIAS:</strong>
+                <div style="border-top: 2px solid #000; margin-bottom: 10px; padding-top: 10px;">
+                    <strong style="font-size: 14px;">CUENTAS BANCARIAS:</strong>
                 </div>
                 <div class="footer-banks">
                     ${data.banks.map(bank => `
                         <div class="footer-bank">
-                            <div class="footer-bank-title">${bank.name}:</div>
-                            <div class="footer-bank-details">
+                            <div class="footer-bank-title" style="font-size: 12px;">${bank.name}:</div>
+                            <div class="footer-bank-details" style="font-size: 11px;">
                                 ${bank.accountPen ? `<div>SOLES: Cta. ${bank.accountPen} - CCI: ${bank.cciPen}</div>` : ''}
                                 ${bank.accountUsd ? `<div>DÓLARES: Cta. ${bank.accountUsd} - CCI: ${bank.cciUsd}</div>` : ''}
                             </div>
@@ -599,41 +598,37 @@ function generatePreview(data) {
             </div>
         `;
         
-        // Generar HTML del encabezado para TODAS las páginas
+        // Generar HTML del encabezado para páginas 2+
         const pageHeaderHTML = `
             <div class="page-header-section">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                    <div style="font-weight: bold; font-size: 13px;">${data.companyName} - ${data.companyRuc}</div>
-                    <div style="font-size: 11px;">Cotización: ${data.quoteNumber}</div>
+                    <div style="font-weight: bold; font-size: 14px;">${data.companyName} - ${data.companyRuc}</div>
+                    <div style="font-size: 12px;">Cotización: ${data.quoteNumber}</div>
                 </div>
-                <div style="font-size: 10px; border-top: 1px solid #000; padding-top: 5px;">
+                <div style="font-size: 11px; border-top: 1px solid #000; padding-top: 5px;">
                     <strong>CLIENTE:</strong> ${data.clientName} - <strong>RUC:</strong> ${data.clientRuc} - 
                     <strong>DIRECCIÓN:</strong> ${data.clientAddress}
                 </div>
             </div>
         `;
         
-        // Dividir los items en páginas - AUMENTAR límite a 35 items por página
-        const itemsPerPage = 35;
+        // Dividir los items en páginas - 25 items por página
+        const itemsPerPage = 25;
         const pages = [];
         
         for (let i = 0; i < itemsWithTotals.length; i += itemsPerPage) {
             pages.push(itemsWithTotals.slice(i, i + itemsPerPage));
         }
         
-        // Generar HTML para la primera página
-        const firstPageHTML = generatePageHTML(data, pages[0] || [], 0, pageHeaderHTML, footerBanksHTML, currencySymbol, gravado, totalIgv, total, formatDate, false);
-        
-        // Generar HTML para páginas adicionales
-        let additionalPagesHTML = '';
-        for (let i = 1; i < pages.length; i++) {
-            additionalPagesHTML += generatePageHTML(data, pages[i], i, pageHeaderHTML, footerBanksHTML, currencySymbol, 0, 0, 0, formatDate, true);
+        // Generar HTML para todas las páginas
+        let allPagesHTML = '';
+        for (let i = 0; i < pages.length; i++) {
+            const isLastPage = (i === pages.length - 1);
+            allPagesHTML += generatePageHTML(data, pages[i], i, pageHeaderHTML, footerBanksHTML, currencySymbol, gravado, totalIgv, total, formatDate, i > 0, isLastPage);
         }
         
-        const quoteHTML = firstPageHTML + additionalPagesHTML;
-        
         // Mostrar la vista previa
-        document.getElementById('quote-preview').innerHTML = quoteHTML;
+        document.getElementById('quote-preview').innerHTML = allPagesHTML;
         
     } catch (error) {
         console.error('Error en generatePreview:', error);
@@ -642,12 +637,12 @@ function generatePreview(data) {
 }
 
 // Función auxiliar para generar HTML de cada página
-function generatePageHTML(data, pageItems, pageIndex, pageHeaderHTML, footerBanksHTML, currencySymbol, gravado, totalIgv, total, formatDate, isSecondaryPage) {
+function generatePageHTML(data, pageItems, pageIndex, pageHeaderHTML, footerBanksHTML, currencySymbol, gravado, totalIgv, total, formatDate, isSecondaryPage, isLastPage) {
     const pageClass = isSecondaryPage ? 'secondary-page' : '';
     
     return `
         <div class="${pageClass}">
-            ${pageHeaderHTML}
+            ${isSecondaryPage ? pageHeaderHTML : ''}
             
             ${!isSecondaryPage ? `
             <div class="header-container">
@@ -715,7 +710,7 @@ function generatePageHTML(data, pageItems, pageIndex, pageHeaderHTML, footerBank
                 <tbody>
                     ${pageItems.map((item, index) => `
                         <tr>
-                            <td style="text-align: center">0${(pageIndex * 35) + index + 1}</td>
+                            <td style="text-align: center">${(pageIndex * 25) + index + 1}</td>
                             <td>${item.desc}</td>
                             <td style="text-align: center">${item.unit}</td>
                             <td style="text-align: center">${item.qty}</td>
@@ -726,7 +721,7 @@ function generatePageHTML(data, pageItems, pageIndex, pageHeaderHTML, footerBank
                 </tbody>
             </table>
             
-            ${!isSecondaryPage && pageIndex === 0 ? `
+            ${isLastPage ? `
             <div class="totals">
                 <table>
                     <tr>
@@ -748,7 +743,7 @@ function generatePageHTML(data, pageItems, pageIndex, pageHeaderHTML, footerBank
             ${footerBanksHTML}
         </div>
         
-        ${isSecondaryPage && pageIndex < data.items.length / 35 - 1 ? '<div style="page-break-after: always;"></div>' : ''}
+        ${!isLastPage ? '<div style="page-break-after: always;"></div>' : ''}
     `;
 }
 // Función para volver al formulario
@@ -840,6 +835,7 @@ function resetForm() {
     // Ocultar resultados de búsqueda
     document.getElementById('client-search-results').style.display = 'none';
 }
+
 
 
 
