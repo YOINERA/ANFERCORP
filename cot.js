@@ -836,18 +836,27 @@ function resetForm() {
     document.getElementById('client-search-results').style.display = 'none';
 }
 
-// Función para mostrar impresión y descargar
-function showPrintAndDownload() {
-    // Mostrar pantalla de impresión
-    generatePrintView(quoteData);
-    document.getElementById('preview-screen').classList.remove('active');
-    document.getElementById('print-screen').classList.add('active');
-    
-    // Descargar automáticamente después de un breve delay
-    setTimeout(() => {
-        window.print();
-    }, 1000);
+// Función mejorada para confirmar y descargar
+function confirmAndDownload() {
+    if (confirm('¿Está seguro de que desea confirmar esta cotización y generar el PDF?')) {
+        // Mostrar pantalla de impresión
+        generatePrintView(quoteData);
+        document.getElementById('preview-screen').classList.remove('active');
+        document.getElementById('print-screen').classList.add('active');
+        
+        // Esperar a que se renderice y descargar
+        setTimeout(() => {
+            window.print();
+            
+            // Opcional: Mostrar mensaje de éxito
+            setTimeout(() => {
+                alert('PDF generado exitosamente');
+                newQuote(); // Volver al formulario
+            }, 1500);
+        }, 800);
+    }
 }
+
 
 
 
