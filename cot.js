@@ -13,17 +13,15 @@ const ADVISORS_DB = [
 const DEFAULT_BANKS = [
     {
         name: "BCP",
-        accountPen: "215-95632185-0-88",
-        cciPen: "002-215-009563218508-88",
-        accountUsd: "215-95632185-1-37",
-        cciUsd: "002-215-009563218501-37"
+        accountPen: "5707200550002",
+        cciPen: "00257000720055000209"
     },
     {
         name: "INTERBANK",
-        accountPen: "898-321852147-88",
-        cciPen: "003-898-013218521478-88",
-        accountUsd: "898-321852148-37",
-        cciUsd: "003-898-013218521483-37"
+        accountPen: "600-3007138013",
+        cciPen: "003-600-003007138013-40",
+        accountUsd: "600-3007138020",
+        cciUsd: "003-600-003007138020-45"
     }
 ];
 
@@ -856,6 +854,7 @@ function confirmAndDownload() {
         }, 800);
     }
 }
+
 
 
 
