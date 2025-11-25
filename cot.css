@@ -413,6 +413,7 @@ input, select, textarea {
 }
 
 /* Estilos para impresión */
+/* Estilos para impresión - CORREGIDOS */
 @media print {
     /* Eliminar cualquier sombreado de fondo en toda la página */
     body, .documento, .cuentas-bancarias, .cuentas-bancarias * {
@@ -434,22 +435,45 @@ input, select, textarea {
         border: none !important;
     }
 
-    /* Pie de página fijo para todas las páginas */
+    /* Definir márgenes y áreas fijas para todas las páginas */
     @page {
         margin: 0.5cm !important;
+        margin-bottom: 2.5cm !important; /* Espacio para el pie de página */
+        
         @bottom-center {
             content: element(footer);
+            vertical-align: top;
+            margin-top: 0.5cm;
+        }
+        
+        @top-center {
+            content: element(header);
+            vertical-align: bottom;
+            margin-bottom: 0.5cm;
         }
     }
 
-     .footer-section {
+    /* Pie de página fijo para todas las páginas */
+    .footer-section {
         position: running(footer);
         width: 100%;
         background: white !important;
         border-top: 1px solid #000;
         padding: 8px 0;
         font-size: 9px !important;
-        margin-top: 20px;
+        page-break-inside: avoid;
+    }
+    
+    /* Encabezado fijo para páginas 2+ */
+    .page-header-section {
+        position: running(header);
+        width: 100%;
+        background: white !important;
+        border-bottom: 1px solid #000;
+        padding: 5px 0;
+        font-size: 10px !important;
+        page-break-inside: avoid;
+        display: none; /* Se mostrará solo en impresión para páginas 2+ */
     }
     
     .footer-banks {
@@ -479,23 +503,35 @@ input, select, textarea {
         margin-bottom: 100px !important;
     }
 
-    /* Asegurar espacio para el pie de página */
-    .preview-container {
-        margin-bottom: 120px !important;
+    /* Mostrar encabezado de página solo en páginas 2+ */
+    .preview-container:first-child .page-header-section {
+        display: none;
     }
     
-    /* Definir el pie de página en todas las páginas */
-    @page {
-        margin-bottom: 3cm;
-        @bottom-center {
-            content: element(footer);
-            vertical-align: top;
-        }
+    /* Forzar salto de página antes del pie de página principal */
+    .bank-info {
+        page-break-before: always;
+    }
+    
+    /* Evitar que las tablas se corten mal entre páginas */
+    .quote-table {
+        page-break-inside: auto;
+    }
+    
+    .quote-table tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+    }
+    
+    .quote-table td, .quote-table th {
+        page-break-inside: avoid;
     }
 }
 
-.footer-section {
-    display: none; /* Ocultar en vista normal */
+/* Ocultar secciones especiales en vista normal */
+.footer-section,
+.page-header-section {
+    display: none;
 }
 
 body {
@@ -774,3 +810,4 @@ select#advisor-name {
     text-align: center;
     padding: 10px;
 }
+
