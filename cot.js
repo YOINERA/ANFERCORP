@@ -836,6 +836,18 @@ function resetForm() {
     document.getElementById('client-search-results').style.display = 'none';
 }
 
+// Función para descargar automáticamente el PDF
+function autoDownloadPDF() {
+    // Esperar un momento para que se renderice la vista de impresión
+    setTimeout(() => {
+        window.print();
+    }, 500);
+    
+    // Volver al formulario después de descargar
+    setTimeout(() => {
+        newQuote();
+    }, 2000);
+}
 
 
 
