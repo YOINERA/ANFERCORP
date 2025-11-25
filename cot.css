@@ -433,6 +433,69 @@ input, select, textarea {
         background: white !important;
         border: none !important;
     }
+
+    /* Pie de página fijo para todas las páginas */
+    @page {
+        margin: 0.5cm !important;
+        @bottom-center {
+            content: element(footer);
+        }
+    }
+
+     .footer-section {
+        position: running(footer);
+        width: 100%;
+        background: white !important;
+        border-top: 1px solid #000;
+        padding: 8px 0;
+        font-size: 9px !important;
+        margin-top: 20px;
+    }
+    
+    .footer-banks {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 10px;
+    }
+    
+    .footer-bank {
+        flex: 1;
+        min-width: 45%;
+    }
+    
+    .footer-bank-title {
+        font-weight: bold;
+        margin-bottom: 2px;
+    }
+    
+    .footer-bank-details {
+        font-size: 8px;
+        line-height: 1.2;
+    }
+    
+    /* Asegurar que el contenido principal no se superponga con el pie de página */
+    .preview-container, #quote-preview, #quote-print {
+        margin-bottom: 100px !important;
+    }
+
+    /* Asegurar espacio para el pie de página */
+    .preview-container {
+        margin-bottom: 120px !important;
+    }
+    
+    /* Definir el pie de página en todas las páginas */
+    @page {
+        margin-bottom: 3cm;
+        @bottom-center {
+            content: element(footer);
+            vertical-align: top;
+        }
+    }
+}
+
+.footer-section {
+    display: none; /* Ocultar en vista normal */
 }
 
 body {
