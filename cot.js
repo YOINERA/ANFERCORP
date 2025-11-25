@@ -8,11 +8,31 @@ const ADVISORS_DB = [
     { id: 2, name: "Alayo Yoiner", active: true }
 ];
 
+//Base de datos de bancos
+
+const DEFAULT_BANKS = [
+    {
+        name: "BCP",
+        accountPen: "215-95632185-0-88",
+        cciPen: "002-215-009563218508-88",
+        accountUsd: "215-95632185-1-37",
+        cciUsd: "002-215-009563218501-37"
+    },
+    {
+        name: "INTERBANK",
+        accountPen: "898-321852147-88",
+        cciPen: "003-898-013218521478-88",
+        accountUsd: "898-321852148-37",
+        cciUsd: "003-898-013218521483-37"
+    }
+];
+
 // Base de datos de productos
 const PRODUCTS_DB = [
     { id: 1, code: "H001", name: "Martillo de Acero 16oz", unit: "UND", price: 25.50 },
     { id: 2, code: "H002", name: "Destornillador Phillips #2", unit: "UND", price: 8.90 }
 ];
+
 
 // Base de datos de empresas/clientes frecuentes
 const COMPANIES_DB = [
@@ -37,14 +57,16 @@ const COMPANIES_DB = [
 
 // Inicializar bancos al cargar la página
 document.addEventListener('DOMContentLoaded', function() {
-
     // Verificar si el usuario está autenticado
     if (sessionStorage.getItem('isLoggedIn') !== 'true') {
         window.location.href = 'index.html';
         return;
     }
 
-    addBank(); // Agregar un banco por defecto
+    // Agregar bancos por defecto
+    DEFAULT_BANKS.forEach(bank => {
+        addBank(bank);
+    });
     
     // Establecer fecha actual
     const today = new Date();
@@ -299,12 +321,21 @@ function disableClientFields(enable) {
 
 
 // Función para agregar un nuevo banco
-function addBank() {
+function addBank(bankData = null) {
     bankCounter++;
     const bankContainer = document.getElementById('bank-accounts-container');
     const bankItem = document.createElement('div');
     bankItem.className = 'bank-item';
     bankItem.id = `bank-${bankCounter}`;
+    
+    // Si no se proporcionan datos, usar datos vacíos
+    const data = bankData || {
+        name: '',
+        accountPen: '',
+        cciPen: '',
+        accountUsd: '',
+        cciUsd: ''
+    };
     
     bankItem.innerHTML = `
         <div class="bank-item-header">
@@ -314,33 +345,34 @@ function addBank() {
         <div class="form-row">
             <div class="form-group">
                 <label for="bank-name-${bankCounter}">Nombre del Banco</label>
-                <input type="text" id="bank-name-${bankCounter}" placeholder="No especificado">
+                <input type="text" id="bank-name-${bankCounter}" value="${data.name}" placeholder="No especificado">
             </div>
         </div>
         <div class="form-row">
             <div class="form-group">
                 <label for="bank-account-pen-${bankCounter}">Cuenta Soles</label>
-                <input type="text" id="bank-account-pen-${bankCounter}" placeholder="No especificada">
+                <input type="text" id="bank-account-pen-${bankCounter}" value="${data.accountPen}" placeholder="No especificada">
             </div>
             <div class="form-group">
                 <label for="bank-cci-pen-${bankCounter}">CCI Soles</label>
-                <input type="text" id="bank-cci-pen-${bankCounter}" placeholder="No especificada">
+                <input type="text" id="bank-cci-pen-${bankCounter}" value="${data.cciPen}" placeholder="No especificada">
             </div>
         </div>
         <div class="form-row">
             <div class="form-group">
                 <label for="bank-account-usd-${bankCounter}">Cuenta Dólares</label>
-                <input type="text" id="bank-account-usd-${bankCounter}" placeholder="No especificada">
+                <input type="text" id="bank-account-usd-${bankCounter}" value="${data.accountUsd}" placeholder="No especificada">
             </div>
             <div class="form-group">
                 <label for="bank-cci-usd-${bankCounter}">CCI Dólares</label>
-                <input type="text" id="bank-cci-usd-${bankCounter}" placeholder="No especificada">
+                <input type="text" id="bank-cci-usd-${bankCounter}" value="${data.cciUsd}" placeholder="No especificada">
             </div>
         </div>
     `;
     
     bankContainer.appendChild(bankItem);
 }
+
 
 // Función para eliminar un banco
 function removeBank(bankId) {
@@ -514,6 +546,7 @@ function showPreview() {
 }
 
 // Función para generar la vista previa
+// Función para generar la vista previa
 function generatePreview(data) {
     try {
         // Calcular totales
@@ -547,6 +580,26 @@ function generatePreview(data) {
         
         // Símbolo de moneda
         const currencySymbol = data.currency === 'USD' ? 'US$' : 'S/';
+        
+        // Generar HTML de las cuentas bancarias para el pie de página
+        const footerBanksHTML = `
+    <div class="footer-section">
+        <div style="border-top: 1px solid #000; margin-bottom: 5px; padding-top: 5px;">
+            <strong>CUENTAS BANCARIAS:</strong>
+        </div>
+        <div class="footer-banks">
+            ${data.banks.map(bank => `
+                <div class="footer-bank">
+                    <div class="footer-bank-title">${bank.name}:</div>
+                    <div class="footer-bank-details">
+                        ${bank.accountPen ? `<div>SOLES: Cta. ${bank.accountPen} - CCI: ${bank.cciPen}</div>` : ''}
+                        ${bank.accountUsd ? `<div>DÓLARES: Cta. ${bank.accountUsd} - CCI: ${bank.cciUsd}</div>` : ''}
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+    </div>
+`;
         
         // Generar HTML de la cotización con nuevo diseño
         const quoteHTML = `
@@ -656,6 +709,8 @@ function generatePreview(data) {
                 </div>
             </div>
 
+            ${footerBanksHTML}
+
             <div style="position: fixed; bottom: 0; left: 0; width: 100%; border-top: 10px solid #efb810; margin: 0; background: transparent;"></div>
         `;
         
@@ -723,11 +778,15 @@ function resetForm() {
     const itemsBody = document.getElementById('items-body');
     itemsBody.innerHTML = '';
     
-    // Resetear bancos
+    // CORREGIDO: Resetear bancos pero mantener los por defecto
     const bankContainer = document.getElementById('bank-accounts-container');
     bankContainer.innerHTML = '';
     bankCounter = 0;
-    addBank(); // Agregar un banco por defecto
+    
+    // Agregar bancos por defecto nuevamente
+    DEFAULT_BANKS.forEach(bank => {
+        addBank(bank);
+    });
     
     // Restablecer fechas
     document.getElementById('quote-date').valueAsDate = new Date();
@@ -752,7 +811,5 @@ function resetForm() {
     
     // Ocultar resultados de búsqueda
     document.getElementById('client-search-results').style.display = 'none';
-
 }
-
 
