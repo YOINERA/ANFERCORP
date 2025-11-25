@@ -412,10 +412,9 @@ input, select, textarea {
     margin-top: 30px;
 }
 
-/* Estilos para impresión */
-/* Estilos para impresión - CORREGIDOS */
+/* Estilos para impresión - ENFOQUE ALTERNATIVO */
 @media print {
-    /* Eliminar cualquier sombreado de fondo en toda la página */
+    /* Reset general para impresión */
     body, .documento, .cuentas-bancarias, .cuentas-bancarias * {
         background-color: white !important;
         background: white !important;
@@ -423,57 +422,86 @@ input, select, textarea {
         print-color-adjust: exact;
     }
     
-    /* Asegurar que no haya colores de fondo en ningún elemento */
     * {
         background: transparent !important;
         box-shadow: none !important;
     }
     
-    /* Estilo específico para la sección de cuentas bancarias */
-    .cuentas-bancarias {
-        background: white !important;
-        border: none !important;
-    }
-
-    /* Definir márgenes y áreas fijas para todas las páginas */
-    @page {
-        margin: 0.5cm !important;
-        margin-bottom: 2.5cm !important; /* Espacio para el pie de página */
-        
-        @bottom-center {
-            content: element(footer);
-            vertical-align: top;
-            margin-top: 0.5cm;
-        }
-        
-        @top-center {
-            content: element(header);
-            vertical-align: bottom;
-            margin-bottom: 0.5cm;
-        }
-    }
-
-    /* Pie de página fijo para todas las páginas */
-    .footer-section {
-        position: running(footer);
-        width: 100%;
-        background: white !important;
-        border-top: 1px solid #000;
-        padding: 8px 0;
-        font-size: 9px !important;
-        page-break-inside: avoid;
+    /* Ocultar elementos no necesarios en impresión */
+    .screen:not(.active),
+    .actions,
+    .btn,
+    h1 {
+        display: none !important;
     }
     
-    /* Encabezado fijo para páginas 2+ */
-    .page-header-section {
-        position: running(header);
-        width: 100%;
+    /* Mostrar solo la pantalla de impresión */
+    #print-screen {
+        display: block !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        border: none !important;
+    }
+    
+    .preview-container {
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+    }
+    
+    /* Pie de página en TODAS las páginas */
+    .footer-section {
+        display: block !important;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
         background: white !important;
+        border-top: 1px solid #000;
+        padding: 8px 15px;
+        font-size: 9px !important;
+        margin: 0;
+        z-index: 1000;
+    }
+    
+    /* Encabezado en páginas 2+ */
+    .page-header-section {
+        display: none; /* Oculto por defecto */
+    }
+    
+    /* Mostrar encabezado desde la segunda página en adelante */
+    @page :first {
+        .page-header-section {
+            display: none !important;
+        }
+    }
+    
+    @page {
+        margin: 1cm 0.5cm 2cm 0.5cm !important; /* Margen inferior más grande para el pie */
+        
+        @bottom-left {
+            content: "Página " counter(page);
+            font-size: 8px;
+        }
+    }
+    
+    /* Forzar mostrar encabezado en páginas 2+ usando una clase específica */
+    body:after {
+        content: "";
+        display: table;
+        page-break-after: always;
+    }
+    
+    /* Encabezado para páginas secundarias */
+    .secondary-page .page-header-section {
+        display: block !important;
         border-bottom: 1px solid #000;
         padding: 5px 0;
+        margin-bottom: 10px;
         font-size: 10px !important;
-        page-break-inside: avoid;
-        display: none; /* Se mostrará solo en impresión para páginas 2+ */
+        background: white !important;
     }
     
     .footer-banks {
@@ -491,6 +519,7 @@ input, select, textarea {
     .footer-bank-title {
         font-weight: bold;
         margin-bottom: 2px;
+        font-size: 9px;
     }
     
     .footer-bank-details {
@@ -498,22 +527,7 @@ input, select, textarea {
         line-height: 1.2;
     }
     
-    /* Asegurar que el contenido principal no se superponga con el pie de página */
-    .preview-container, #quote-preview, #quote-print {
-        margin-bottom: 100px !important;
-    }
-
-    /* Mostrar encabezado de página solo en páginas 2+ */
-    .preview-container:first-child .page-header-section {
-        display: none;
-    }
-    
-    /* Forzar salto de página antes del pie de página principal */
-    .bank-info {
-        page-break-before: always;
-    }
-    
-    /* Evitar que las tablas se corten mal entre páginas */
+    /* Control de saltos de página */
     .quote-table {
         page-break-inside: auto;
     }
@@ -526,11 +540,26 @@ input, select, textarea {
     .quote-table td, .quote-table th {
         page-break-inside: avoid;
     }
+    
+    /* Asegurar que el contenido no se superponga con el pie */
+    .preview-container {
+        padding-bottom: 80px !important;
+    }
+    
+    .bank-info {
+        page-break-before: avoid;
+        margin-bottom: 100px !important;
+    }
 }
 
 /* Ocultar secciones especiales en vista normal */
 .footer-section,
 .page-header-section {
+    display: none;
+}
+
+/* Clase para páginas secundarias */
+.secondary-page {
     display: none;
 }
 
@@ -810,4 +839,5 @@ select#advisor-name {
     text-align: center;
     padding: 10px;
 }
+
 
