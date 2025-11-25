@@ -461,7 +461,7 @@ input, select, textarea {
         right: 0;
         background: white !important;
         border-top: 5px solid #efb810;
-        padding: 10px 25px;
+        padding: 15px 20px;
         font-size: 16px !important;
         margin: 0;
         z-index: 1000;
@@ -486,14 +486,14 @@ input, select, textarea {
     }
     
     @page {
-        margin: 1cm 0.5cm 5cm 0.5cm !important; /* Margen inferior más grande para el pie */
+        margin: 1cm 0.5cm 3cm 0.5cm !important; /* Margen inferior más grande para el pie */
     }
     
     .footer-banks {
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
-        gap: 25px;
+        gap: 20px;
     }
     
     .footer-bank {
@@ -504,8 +504,8 @@ input, select, textarea {
     
     .footer-bank-title {
         font-weight: bold;
-        margin-bottom: 8px;
-        font-size: 16px;
+        margin-bottom: 5px;
+        font-size: 15px;
     }
     
     .footer-bank-details {
@@ -533,7 +533,7 @@ input, select, textarea {
     
     /* Asegurar que el contenido no se superponga con el pie */
     .preview-container {
-        padding-bottom: 160px !important;
+        padding-bottom: 120px !important;
     }
     
     /* Mostrar páginas secundarias */
@@ -914,6 +914,7 @@ select#advisor-name {
     text-align: center;
     padding: 10px;
 }
+
 
 
 
