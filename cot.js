@@ -546,7 +546,6 @@ function showPreview() {
 }
 
 // Función para generar la vista previa
-// Función para generar la vista previa
 function generatePreview(data) {
     try {
         // Calcular totales
@@ -744,6 +743,20 @@ function generatePageHTML(data, pageItems, pageIndex, pageHeaderHTML, footerBank
                     </tr>
                 </table>
             </div>
+            
+            <div class="bank-info">
+                <p><strong>CUENTAS BANCARIAS:</strong></p>
+                <div class="bank-container">
+                    ${data.banks.map(bank => `
+                        <div class="bank-column">
+                            <div class="bank-title">${bank.name}:</div>
+                            ${bank.accountPen ? `<div>SOLES: Cta. Cte: ${bank.accountPen} - CCI: ${bank.cciPen}</div>` : ''}
+                            ${bank.accountUsd ? `<div>DÓLARES: Cta. Cte: ${bank.accountUsd} - CCI: ${bank.cciUsd}</div>` : ''}
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+            ` : ''}
 
             ${footerBanksHTML}
         </div>
@@ -840,6 +853,7 @@ function resetForm() {
     // Ocultar resultados de búsqueda
     document.getElementById('client-search-results').style.display = 'none';
 }
+
 
 
 
