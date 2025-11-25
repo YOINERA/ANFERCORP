@@ -546,6 +546,7 @@ function showPreview() {
 }
 
 // Función para generar la vista previa
+// Función para generar la vista previa
 function generatePreview(data) {
     try {
         // Calcular totales
@@ -613,10 +614,43 @@ function generatePreview(data) {
             </div>
         `;
         
-        // Generar HTML de la cotización con nuevo diseño
-        const quoteHTML = `
-            ${pageHeaderHTML}
+        // Dividir los items en páginas si son muchos
+        const itemsPerPage = 20; // Ajusta según necesites
+        const pages = [];
+        
+        for (let i = 0; i < itemsWithTotals.length; i += itemsPerPage) {
+            pages.push(itemsWithTotals.slice(i, i + itemsPerPage));
+        }
+        
+        // Generar HTML para la primera página
+        const firstPageHTML = generatePageHTML(data, pages[0] || [], 0, pageHeaderHTML, footerBanksHTML, currencySymbol, gravado, totalIgv, total, formatDate, false);
+        
+        // Generar HTML para páginas adicionales
+        let additionalPagesHTML = '';
+        for (let i = 1; i < pages.length; i++) {
+            additionalPagesHTML += generatePageHTML(data, pages[i], i, pageHeaderHTML, footerBanksHTML, currencySymbol, 0, 0, 0, formatDate, true);
+        }
+        
+        const quoteHTML = firstPageHTML + additionalPagesHTML;
+        
+        // Mostrar la vista previa
+        document.getElementById('quote-preview').innerHTML = quoteHTML;
+        
+    } catch (error) {
+        console.error('Error en generatePreview:', error);
+        document.getElementById('quote-preview').innerHTML = '<p>Error al generar la vista previa. Por favor, verifique los datos.</p>';
+    }
+}
+
+// Función auxiliar para generar HTML de cada página
+function generatePageHTML(data, pageItems, pageIndex, pageHeaderHTML, footerBanksHTML, currencySymbol, gravado, totalIgv, total, formatDate, isSecondaryPage) {
+    const pageClass = isSecondaryPage ? 'secondary-page' : '';
+    
+    return `
+        <div class="${pageClass}">
+            ${isSecondaryPage ? pageHeaderHTML : ''}
             
+            ${!isSecondaryPage ? `
             <div class="header-container">
                 <div class="company-info">
                     <div class="logo-container">
@@ -639,7 +673,7 @@ function generatePreview(data) {
                         <div class="quote-header-text">COTIZACIÓN</div>
                         <div class="quote-number">${data.quoteNumber}</div>
                     </div>
-                    <br></br>
+                    <br>
                     <div class="quote-details">
                         <div class="detail-row">
                             <span class="detail-label">FECHA EMISION:</span>
@@ -665,8 +699,8 @@ function generatePreview(data) {
                     <p>${data.clientDistrict} - ${data.clientProvince} - ${data.clientDepartment}</p>
                 </div>
             </div>
-
             <div style="border-bottom: 1px solid #000; margin: 10px 0;"></div>
+            ` : ''}
             
             <table class="quote-table">
                 <thead>
@@ -680,9 +714,9 @@ function generatePreview(data) {
                     </tr>
                 </thead>
                 <tbody>
-                    ${itemsWithTotals.map((item, index) => `
+                    ${pageItems.map((item, index) => `
                         <tr>
-                            <td style="text-align: center">0${index + 1}</td>
+                            <td style="text-align: center">0${(pageIndex * 20) + index + 1}</td>
                             <td>${item.desc}</td>
                             <td style="text-align: center">${item.unit}</td>
                             <td style="text-align: center">${item.qty}</td>
@@ -693,6 +727,7 @@ function generatePreview(data) {
                 </tbody>
             </table>
             
+            ${!isSecondaryPage ? `
             <div class="totals">
                 <table>
                     <tr>
@@ -722,21 +757,14 @@ function generatePreview(data) {
                     `).join('')}
                 </div>
             </div>
+            ` : ''}
 
             ${footerBanksHTML}
-
-            <div style="position: fixed; bottom: 0; left: 0; width: 100%; border-top: 10px solid #efb810; margin: 0; background: transparent;"></div>
-        `;
+        </div>
         
-        // Mostrar la vista previa
-        document.getElementById('quote-preview').innerHTML = quoteHTML;
-        
-    } catch (error) {
-        console.error('Error en generatePreview:', error);
-        document.getElementById('quote-preview').innerHTML = '<p>Error al generar la vista previa. Por favor, verifique los datos.</p>';
-    }
+        ${isSecondaryPage ? '<div style="page-break-after: always;"></div>' : ''}
+    `;
 }
-
 // Función para volver al formulario
 function showForm() {
     document.getElementById('preview-screen').classList.remove('active');
@@ -826,5 +854,6 @@ function resetForm() {
     // Ocultar resultados de búsqueda
     document.getElementById('client-search-results').style.display = 'none';
 }
+
 
 
