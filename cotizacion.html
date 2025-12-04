@@ -47,47 +47,47 @@
                 </div>
             </div>
             
-           <h2>Información del Cliente</h2>
+            <h2>Información del Cliente</h2>
 
-<div class="client-search-container">
-    <div class="form-row">
-        <div class="form-group">
-            <label for="client-ruc">RUC</label>
-            <input type="text" id="client-ruc" placeholder="Ingrese RUC del cliente" oninput="searchClientByRUC()">
-        </div>
-    </div>
-    <div id="client-search-results" class="search-results"></div>
-</div>
+            <div class="client-search-container">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="client-ruc">RUC</label>
+                        <input type="text" id="client-ruc" placeholder="Ingrese RUC del cliente" oninput="searchClientByRUC()">
+                    </div>
+                </div>
+                <!-- CAMBIO: Asegurar que el div de resultados esté cerrado correctamente -->
+                <div id="client-search-results" class="search-results"></div>
+            </div>
 
-<div class="form-row">
-    <div class="form-group">
-        <label for="client-name">Nombre/Razón Social</label>
-        <input type="text" id="client-name" placeholder="Nombre del cliente">
-    </div>
-</div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="client-name">Nombre/Razón Social</label>
+                    <input type="text" id="client-name" placeholder="Nombre del cliente">
+                </div>
+            </div>
 
-<div class="form-row">
-    <div class="form-group">
-        <label for="client-address">Dirección</label>
-        <input type="text" id="client-address" placeholder="Dirección completa">
-    </div>
-</div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="client-address">Dirección</label>
+                    <input type="text" id="client-address" placeholder="Dirección completa">
+                </div>
+            </div>
 
-<div class="form-row">
-    <div class="form-group">
-        <label for="client-district">Distrito</label>
-        <input type="text" id="client-district" placeholder="Distrito">
-    </div>
-    <div class="form-group">
-        <label for="client-province">Provincia</label>
-        <input type="text" id="client-province" placeholder="Provincia">
-    </div>
-    <div class="form-group">
-        <label for="client-department">Departamento</label>
-        <input type="text" id="client-department" placeholder="Departamento">
-    </div>
-</div>
-
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="client-district">Distrito</label>
+                    <input type="text" id="client-district" placeholder="Distrito">
+                </div>
+                <div class="form-group">
+                    <label for="client-province">Provincia</label>
+                    <input type="text" id="client-province" placeholder="Provincia">
+                </div>
+                <div class="form-group">
+                    <label for="client-department">Departamento</label>
+                    <input type="text" id="client-department" placeholder="Departamento">
+                </div>
+            </div>
             
             <h2>Artículos de la Cotización</h2>
             <div class="product-search-container">
@@ -100,6 +100,7 @@
                 <div id="search-results" class="search-results"></div>
             </div>
             
+            <!-- CAMBIO CRÍTICO: Actualizar la tabla para que coincida con JavaScript -->
             <table class="items-table">
                 <thead>
                     <tr>
@@ -111,11 +112,18 @@
                     </tr>
                 </thead>
                 <tbody id="items-body">
-                    
+                    <!-- Las filas se agregarán dinámicamente aquí -->
+                    <!-- IMPORTANTE: El JavaScript creará 5 columnas: -->
+                    <!-- 1. Descripción (con campos ocultos para marca y código) -->
+                    <!-- 2. Unidad -->
+                    <!-- 3. Cantidad -->
+                    <!-- 4. Precio Unitario -->
+                    <!-- 5. Acciones -->
                 </tbody>
             </table>
             
             <button type="button" class="btn" onclick="addItem()">Agregar Artículo Manualmente</button>
+            
             <h2>Información Bancaria</h2>
             
             <div class="bank-accounts" id="bank-accounts-container">
@@ -131,6 +139,7 @@
                     <label for="advisor-name">Nombre del Asesor</label>
                     <select id="advisor-name">
                         <option value="">Seleccione un asesor</option>
+                        <!-- Las opciones se cargarán dinámicamente -->
                     </select>
                 </div>
             </div>
@@ -157,7 +166,6 @@
         
         <!-- PANTALLA 3: IMPRIMIR -->
         <div id="print-screen" class="screen">
-            
             <div id="quote-print">
                 <!-- La cotización para imprimir se generará aquí con JavaScript -->
             </div>
@@ -171,10 +179,4 @@
 
     <script src="cot.js"></script>
 </body>
-
 </html>
-
-
-
-
-
