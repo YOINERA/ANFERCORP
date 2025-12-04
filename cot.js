@@ -8,8 +8,7 @@ const ADVISORS_DB = [
     { id: 2, name: "Alayo Yoiner", active: true }
 ];
 
-//Base de datos de bancos
-
+// Base de datos de bancos
 const DEFAULT_BANKS = [
     {
         name: "BCP",
@@ -27,10 +26,9 @@ const DEFAULT_BANKS = [
 
 // Base de datos de productos
 const PRODUCTS_DB = [
-    { id: 1, code: "H001", name: "Martillo de Acero 16oz", unit: "UND", price: 25.50 },
-    { id: 2, code: "H002", name: "Destornillador Phillips #2", unit: "UND", price: 8.90 }
+    { id: 1, code: "H001", name: "Martillo de Acero 16oz", brand: "Truper", unit: "UND", price: 25.50 },
+    { id: 2, code: "H002", name: "Destornillador Phillips #2", brand: "Stanley", unit: "UND", price: 8.90 }
 ];
-
 
 // Base de datos de empresas/clientes frecuentes
 const COMPANIES_DB = [
@@ -50,7 +48,6 @@ const COMPANIES_DB = [
         province: "LIMA",
         department: "LIMA"
     }
-    // Puedes agregar más empresas aquí según necesites
 ];
 
 // Inicializar bancos al cargar la página
@@ -82,8 +79,6 @@ document.addEventListener('DOMContentLoaded', function() {
     setupProductSearch();
 });
 
-
-
 // Función para cargar asesores en el select
 function loadAdvisors() {
     const advisorSelect = document.getElementById('advisor-name');
@@ -110,7 +105,7 @@ function loadAdvisors() {
         });
 }
 
-// Función para configurar el buscador de productos
+// Función para configurar el buscador de productos - CORREGIDA COMPLETAMENTE
 function setupProductSearch() {
     const searchInput = document.getElementById('product-search');
     const searchResults = document.getElementById('search-results');
@@ -124,25 +119,37 @@ function setupProductSearch() {
             return;
         }
         
-        // Filtrar productos
-         const filteredProducts = PRODUCTS_DB.filter(product => 
+        // Filtrar productos (incluyendo búsqueda por marca)
+        const filteredProducts = PRODUCTS_DB.filter(product => 
             product.name.toLowerCase().includes(searchTerm) || 
-            product.code.toLowerCase().includes(searchTerm)
+            product.code.toLowerCase().includes(searchTerm) ||
+            (product.brand && product.brand.toLowerCase().includes(searchTerm))
         );
         
         // Mostrar resultados
         if (filteredProducts.length > 0) {
-            searchResults.innerHTML = filteredProducts.map(product => `
-                <div class="search-result-item" data-product-id="${product.id}">
-                    <div class="product-info">
-                        <strong>${product.name}</strong> (${product.code})
+            searchResults.innerHTML = filteredProducts.map(product => {
+                // Construir descripción con marca y código
+                let displayText = product.name;
+                if (product.brand && product.brand.trim() !== '') {
+                    displayText += ` (${product.brand})`;
+                }
+                if (product.code && product.code.trim() !== '') {
+                    displayText += ` - ${product.code}`;
+                }
+                
+                return `
+                    <div class="search-result-item" data-product-id="${product.id}">
+                        <div class="product-info">
+                            <strong>${displayText}</strong>
+                        </div>
+                        <div class="product-details">
+                            ${product.unit} - S/ ${product.price.toFixed(2)}
+                        </div>
+                        <button type="button" class="btn btn-add-product">Agregar</button>
                     </div>
-                    <div class="product-details">
-                        ${product.category} - ${product.unit} - S/ ${product.price.toFixed(2)}
-                    </div>
-                    <button type="button" class="btn btn-add-product">Agregar</button>
-                </div>
-            `).join('');
+                `;
+            }).join('');
             
             searchResults.style.display = 'block';
             
@@ -171,18 +178,21 @@ function setupProductSearch() {
     });
 }
 
-// Función para verificar si un producto ya existe en la tabla
+// Función para verificar si un producto ya existe en la tabla - CORREGIDA
 function productExists(productName) {
-    const existingItems = document.querySelectorAll('.item-desc');
+    const existingItems = document.querySelectorAll('.item-original-name');
     for (let item of existingItems) {
-        if (item.value.toLowerCase().trim() === productName.toLowerCase().trim()) {
+        // Solo comparar el nombre base (sin marca ni código)
+        const existingName = item.value.toLowerCase().trim();
+        const newName = productName.toLowerCase().trim();
+        if (existingName === newName) {
             return true;
         }
     }
     return false;
 }
 
-// Función para agregar producto desde la búsqueda
+// Función para agregar producto desde la búsqueda - CORREGIDA
 function addProductFromSearch(productId) {
     const product = PRODUCTS_DB.find(p => p.id === productId);
     
@@ -196,18 +206,32 @@ function addProductFromSearch(productId) {
         const itemsBody = document.getElementById('items-body');
         const newRow = document.createElement('tr');
         
+        // Construir la descripción formateada con marca y código
+        let description = product.name;
+        if (product.brand && product.brand.trim() !== '') {
+            description += ` (${product.brand})`;
+        }
+        if (product.code && product.code.trim() !== '') {
+            description += ` - ${product.code}`;
+        }
+        
         newRow.innerHTML = `
-            <td><input type="text" class="item-desc" value="${product.name}" placeholder="Descripción del artículo"></td>
+            <td>
+                <input type="text" class="item-desc" value="${description}" placeholder="Descripción del artículo">
+                <input type="hidden" class="item-original-name" value="${product.name}">
+                <input type="hidden" class="item-brand" value="${product.brand || ''}">
+                <input type="hidden" class="item-code" value="${product.code || ''}">
+            </td>
             <td>
                 <select class="item-unit">
                     <option value="UND" ${product.unit === 'UND' ? 'selected' : ''}>UND</option>
-                    <option value="KG" ${product.unit === 'KG' ? 'selected' : ''}>KG</option>
-                    <option value="PAR" ${product.unit === 'PAR' ? 'selected' : ''}>PAR</option>
-                    <option value="MTS" ${product.unit === 'MTS' ? 'selected' : ''}>MTS</option>
-                    <option value="GLN" ${product.unit === 'GLN' ? 'selected' : ''}>GLN</option>
-                    <option value="LTS" ${product.unit === 'LTS' ? 'selected' : ''}>LTS</option>
-                    <option value="CAJ" ${product.unit === 'CAJ' ? 'selected' : ''}>CAJ</option>
-                    <option value="ROL" ${product.unit === 'ROL' ? 'selected' : ''}>ROL</option>
+                    <option value="KG">KG</option>
+                    <option value="PAR">PAR</option>
+                    <option value="MTS">MTS</option>
+                    <option value="GLN">GLN</option>
+                    <option value="LTS">LTS</option>
+                    <option value="CAJ">CAJ</option>
+                    <option value="ROL">ROL</option>
                 </select>
             </td>
             <td><input type="number" class="item-qty" value="1" min="1"></td>
@@ -259,8 +283,7 @@ function searchClientByRUC() {
         searchResults.style.display = 'block';
     } else {
         // Mostrar opción para agregar manualmente
-        searchResults.innerHTML = `
-        `;
+        searchResults.innerHTML = '';
         searchResults.style.display = 'block';
     }
 }
@@ -284,6 +307,7 @@ function fillClientData(ruc) {
         disableClientFields(true);
     }
 }
+
 // Cerrar resultados de búsqueda al hacer clic fuera
 document.addEventListener('click', function(e) {
     const clientSearch = document.getElementById('client-ruc');
@@ -293,8 +317,6 @@ document.addEventListener('click', function(e) {
         clientResults.style.display = 'none';
     }
 });
-
-
 
 // Función para habilitar/deshabilitar campos del cliente
 function disableClientFields(enable) {
@@ -314,9 +336,6 @@ function disableClientFields(enable) {
         }
     });
 }
-
-
-
 
 // Función para agregar un nuevo banco
 function addBank(bankData = null) {
@@ -371,7 +390,6 @@ function addBank(bankData = null) {
     bankContainer.appendChild(bankItem);
 }
 
-
 // Función para eliminar un banco
 function removeBank(bankId) {
     const bankItem = document.getElementById(`bank-${bankId}`);
@@ -388,7 +406,12 @@ function addItem() {
     const newRow = document.createElement('tr');
     
     newRow.innerHTML = `
-        <td><input type="text" class="item-desc" placeholder="Descripción del artículo"></td>
+        <td>
+            <input type="text" class="item-desc" placeholder="Descripción del artículo">
+            <input type="hidden" class="item-original-name" value="">
+            <input type="hidden" class="item-brand" value="">
+            <input type="hidden" class="item-code" value="">
+        </td>
         <td>
             <select class="item-unit">
                 <option value="UND">UND</option>
@@ -456,7 +479,7 @@ function removeItem(button) {
     }
 }
 
-// Función para mostrar la vista previa - CORREGIDA
+// Función para mostrar la vista previa - CORREGIDA COMPLETAMENTE
 function showPreview() {
     try {
         // Validar si hay productos duplicados
@@ -512,18 +535,47 @@ function showPreview() {
             });
         });
         
-        // Recopilar artículos de forma segura
+        // Recopilar artículos de forma segura - REVISADO
         const itemRows = document.querySelectorAll('#items-body tr');
         quoteData.items = [];
-        
+
         itemRows.forEach(row => {
-            const desc = row.querySelector('.item-desc').value || 'Artículo';
-            const unit = row.querySelector('.item-unit').value || 'UND';
-            const qty = parseFloat(row.querySelector('.item-qty').value) || 0;
-            const price = parseFloat(row.querySelector('.item-price').value) || 0;
+            // Obtener los campos visibles y ocultos
+            const descInput = row.querySelector('.item-desc');
+            const originalNameInput = row.querySelector('.item-original-name');
+            const brandInput = row.querySelector('.item-brand');
+            const codeInput = row.querySelector('.item-code');
+            const unitSelect = row.querySelector('.item-unit');
+            const qtyInput = row.querySelector('.item-qty');
+            const priceInput = row.querySelector('.item-price');
+            
+            // Verificar que todos los elementos existan
+            if (!descInput || !unitSelect || !qtyInput || !priceInput) return;
+            
+            // Obtener valores
+            const desc = descInput.value || 'Artículo';
+            const unit = unitSelect.value || 'UND';
+            const qty = parseFloat(qtyInput.value) || 0;
+            const price = parseFloat(priceInput.value) || 0;
+            
+            // Construir descripción final
+            let finalDesc = desc;
+            
+            // Si hay campos ocultos (producto de la base de datos), reconstruir la descripción
+            if (originalNameInput && originalNameInput.value) {
+                finalDesc = originalNameInput.value;
+                
+                if (brandInput && brandInput.value && brandInput.value.trim() !== '') {
+                    finalDesc += ` (${brandInput.value.trim()})`;
+                }
+                
+                if (codeInput && codeInput.value && codeInput.value.trim() !== '') {
+                    finalDesc += ` - ${codeInput.value.trim()}`;
+                }
+            }
             
             quoteData.items.push({
-                desc,
+                desc: finalDesc,
                 unit,
                 qty,
                 price
@@ -542,7 +594,8 @@ function showPreview() {
         alert('Error al generar la vista previa. Verifique que todos los campos estén completos.');
     }
 }
-// Función para generar la vista previa
+
+// Función para generar la vista previa - CORREGIDA
 function generatePreview(data) {
     try {
         // Calcular totales
@@ -610,7 +663,7 @@ function generatePreview(data) {
             </div>
         `;
         
-        // Dividir los items en páginas - 25 items por página
+        // Dividir los items en páginas - 30 items por página
         const itemsPerPage = 30;
         const pages = [];
         
@@ -743,6 +796,7 @@ function generatePageHTML(data, pageItems, pageIndex, pageHeaderHTML, footerBank
         ${!isLastPage ? '<div style="page-break-after: always;"></div>' : ''}
     `;
 }
+
 // Función para volver al formulario
 function showForm() {
     document.getElementById('preview-screen').classList.remove('active');
@@ -770,8 +824,6 @@ function generatePrintView(data) {
     generatePreview(data);
     document.getElementById('quote-print').innerHTML = document.getElementById('quote-preview').innerHTML;
 }
-
-
 
 // Función para nueva cotización
 function newQuote() {
@@ -853,19 +905,3 @@ function confirmAndDownload() {
         }, 800);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
