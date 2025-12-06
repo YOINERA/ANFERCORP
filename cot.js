@@ -1736,15 +1736,40 @@ function generatePreview(data) {
         const total = subtotal;
         
         // Formatear fechas
-        const formatDate = (dateString) => {
-            if (!dateString) return '10/11/2025';
-            try {
-                const date = new Date(dateString);
-                return date.toLocaleDateString('es-PE');
-            } catch {
-                return '10/11/2025';
-            }
-        };
+        // Función para formatear fechas - CORREGIDA PARA MANEJAR ZONAS HORARIAS
+const formatDate = (dateString) => {
+    if (!dateString) return '10/11/2025';
+    
+    try {
+        // Crear la fecha en formato UTC para evitar problemas de zona horaria
+        // El input date proporciona la fecha en formato YYYY-MM-DD (sin hora)
+        const dateParts = dateString.split('-');
+        if (dateParts.length !== 3) {
+            // Si no está en el formato esperado, intentar parsear directamente
+            const date = new Date(dateString);
+            return date.toLocaleDateString('es-PE');
+        }
+        
+        // Crear fecha en UTC para evitar el desplazamiento de un día
+        const year = parseInt(dateParts[0]);
+        const month = parseInt(dateParts[1]) - 1; // Los meses en JavaScript son 0-11
+        const day = parseInt(dateParts[2]);
+        
+        // Crear fecha en UTC (sin hora local)
+        const date = new Date(Date.UTC(year, month, day));
+        
+        // Formatear manualmente para asegurar el formato correcto
+        const formattedDay = String(date.getUTCDate()).padStart(2, '0');
+        const formattedMonth = String(date.getUTCMonth() + 1).padStart(2, '0');
+        const formattedYear = date.getUTCFullYear();
+        
+        return `${formattedDay}/${formattedMonth}/${formattedYear}`;
+        
+    } catch (error) {
+        console.error('Error formateando fecha:', error, dateString);
+        return '10/11/2025';
+    }
+};
         
         // Símbolo de moneda
         const currencySymbol = data.currency === 'USD' ? 'US$' : 'S/';
@@ -2025,6 +2050,7 @@ function confirmAndDownload() {
         }, 800);
     }
 }
+
 
 
 
