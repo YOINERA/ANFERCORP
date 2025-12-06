@@ -1252,7 +1252,7 @@ function setupProductSearch() {
                 // Construir descripción con marca y código
                 let displayText = product.name;
                 if (product.brand && product.brand.trim() !== '') {
-                    displayText += ` (${product.brand})`;
+                    displayText += ` - ${product.brand})`;
                 }
                 if (product.code && product.code.trim() !== '') {
                     displayText += ` - ${product.code}`;
@@ -2025,5 +2025,6 @@ function confirmAndDownload() {
         }, 800);
     }
 }
+
 
 
