@@ -1329,7 +1329,7 @@ function addProductFromSearch(productId) {
         // Construir la descripción formateada con marca y código
         let description = product.name;
         if (product.brand && product.brand.trim() !== '') {
-            description += `  -  ${product.brand}`;
+            description += ` - ${product.brand}`;
         }
         if (product.code && product.code.trim() !== '') {
             description += ` - ${product.code}`;
@@ -2025,6 +2025,7 @@ function confirmAndDownload() {
         }, 800);
     }
 }
+
 
 
 
