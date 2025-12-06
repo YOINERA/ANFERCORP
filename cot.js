@@ -1686,7 +1686,7 @@ function showPreview() {
                 finalDesc = originalNameInput.value;
                 
                 if (brandInput && brandInput.value && brandInput.value.trim() !== '') {
-                    finalDesc += ` (${brandInput.value.trim()})`;
+                    finalDesc += `  -  ${brandInput.value.trim()}`;
                 }
                 
                 if (codeInput && codeInput.value && codeInput.value.trim() !== '') {
@@ -2025,6 +2025,7 @@ function confirmAndDownload() {
         }, 800);
     }
 }
+
 
 
 
