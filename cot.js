@@ -2045,11 +2045,11 @@ function confirmAndDownload() {
             // Opcional: Mostrar mensaje de éxito
             setTimeout(() => {
                 alert('PDF generado exitosamente');
-                newQuote(); // Volver al formulario
             }, 1500);
         }, 800);
     }
 }
+
 
 
 
